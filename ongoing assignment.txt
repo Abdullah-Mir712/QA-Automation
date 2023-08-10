@@ -1,7 +1,5 @@
 package Selenium;
-
-import java.util.List;
-
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,23 +8,22 @@ import org.openqa.selenium.support.ui.Select;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class Lab3 {
+public class Browser {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
 		WebDriverManager.chromedriver().setup();
-		
 		WebDriver driver = new ChromeDriver();
 		driver.get("https://omayo.blogspot.com/");
-		System.out.println(driver.getTitle());
+		driver.getTitle();
+		
 		driver.manage().window().maximize(); // maximize web page
 
 		
 		
 
 		
-	
+		
 		String tableData = driver.findElement(By.id("table1")).getText();
 		System.out.println(tableData);
 		
@@ -54,12 +51,50 @@ public class Lab3 {
 		
 		WebElement popupWindow = driver.findElement(By.xpath("//*[@id=\"HTML37\"]/div[1]/p/a"));
 		popupWindow.click();
-		//driver.switchTo().newWindow(popupWindow);
-		String popupText = popupWindow.getText();		
-		System.out.println(popupText);
-        
+		String mainWindowHandle = driver.getWindowHandle();
+		
+		for (String windowHandle : driver.getWindowHandles()) {
+		    if (!windowHandle.equals(mainWindowHandle)) {
+		        driver.switchTo().window(windowHandle);
+		        break;
+		    }
+		}
+		String popupWindowText = driver.findElement(By.xpath("/html/body/h2")).getText();
+		System.out.println(popupWindowText);
+		
+		driver.close();
+		driver.switchTo().window(mainWindowHandle);
+		
+		WebElement radioButton = driver.findElement(By.id("radio1"));
+		radioButton.click();
+		
+		WebElement alertButton2 = driver.findElement(By.id("alert1"));
+		alertButton2.click();
+		driver.switchTo().alert().accept();
+		
+		WebElement checkBox2 = driver.findElement(By.id("checkbox2"));
+		checkBox2.click();
+		
+		WebElement checkBox1 = driver.findElement(By.id("checkbox1"));
+		checkBox1.click();
+		
+		WebElement readOnlyText = driver.findElement(By.xpath("//input[@id='rotb']"));
+		String textValue = readOnlyText.getAttribute("value");
+		System.out.println(textValue);
+		
+		WebElement promptButton = driver.findElement(By.xpath("//*[@id=\"prompt\"]"));
+		promptButton.click();
+		Alert alert = driver.switchTo().alert();
+		String inputText = "Hello, Selenium!";
+		alert.sendKeys(inputText);
+		alert.accept();
+		
 
-        
+
+		
+		
+
+		
 
 	}
 
