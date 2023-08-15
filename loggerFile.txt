@@ -1,0 +1,134 @@
+
+
+
+----------------------------------------------------------------------------java class
+
+package SeleniumTest;
+
+import java.time.Duration;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class TestLogger {
+	public static WebDriver driver;
+	public static Logger log;
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		log= LogManager.getLogger(TestLogger.class);
+
+		WebDriverManager.chromedriver().setup();
+		log.info("chromedriver setup is complete");
+		driver = new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		log.info("Implicit wait of 10 seconds");
+		driver.get("https://www.myntra.com/");
+		log.info("Logged into Myntra");
+		try {
+			boolean text= driver.findElement(By.xpath("//a[contains(text(),'Women')]")).isDisplayed();
+		}
+		catch(Exception e) {
+			System.out.print(e.getMessage());
+			log.error("Exception occured", new Exception("Element Not Found"));
+		}
+		finally {
+			driver.quit();
+			log.info("Quitting the driver");
+		}
+
+	}
+
+}
+
+
+
+-------------------------------------------------------------log4j2.properties file 
+
+name=PropertiesConfig
+property.filename = logs
+appenders = console, file
+
+appender.console.type = Console
+appender.console.name = STDOUT
+appender.console.layout.type = PatternLayout
+appender.console.layout.pattern = [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+
+appender.file.type = File
+appender.file.name = LOGFILE
+appender.file.fileName=${filename}/logs.log
+appender.file.layout.type=PatternLayout
+appender.file.layout.pattern=[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+
+rootLogger.level = debug
+rootLogger.appenderRefs = console
+rootLogger.appenderRef.stdout.ref = STDOUT
+
+
+
+
+-----------------------------------------------------------------pom.xml file 
+
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>LoggerPractice</groupId>
+	<artifactId>LoggerPractice</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<dependencies>
+
+		<!--
+		https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.4.1</version>
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.11.0</version>
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+
+		<dependency>
+
+			<groupId>org.apache.logging.log4j</groupId>
+
+			<artifactId>log4j-core</artifactId>
+
+			<version>2.19.0</version>
+
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+
+			<groupId>org.apache.logging.log4j</groupId>
+
+			<artifactId>log4j-api</artifactId>
+
+			<version>2.19.0</version>
+
+		</dependency>
+	</dependencies>
+</project>
+
+
+
+----------------------------------------------------------------------------
