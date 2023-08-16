@@ -1,101 +1,178 @@
-package Selenium;
-import org.openqa.selenium.Alert;
+package testNG_sample;
+
+import java.time.Duration;
+import java.util.Set;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class Browser {
+public class Test1 {
+	
+	WebDriver driver;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	@BeforeTest
+    public void setUp() {
+        // Set up the WebDriver instance (assuming you're using ChromeDriver)
 		WebDriverManager.chromedriver().setup();
-		WebDriver driver = new ChromeDriver();
-		driver.get("https://omayo.blogspot.com/");
-		driver.getTitle();
-		
-		driver.manage().window().maximize(); // maximize web page
+        driver = new ChromeDriver();
+		driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+		driver.manage().window().maximize();
+        
 
-		
-		
 
+
+
+    }
+	
+	
+	@Test
+	public void Test() {
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[2]/div/div[1]/div[2]/button"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[2]/div/div[1]/button[1]"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input"))).sendKeys("Muhammad");    
+        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[2]/input")).sendKeys("Sufyan");
+        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[3]/input")).sendKeys("54000");
+        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/button")).click();
+        driver.switchTo().alert().accept();
+			
 		
 		
-		String tableData = driver.findElement(By.id("table1")).getText();
-		System.out.println(tableData);
+	}
+	
+	@Test
+	public void Test2(){
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[1]/button[2]")).click();
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"userSelect\"]")));
 		
-		Select Companies = new Select(driver.findElement(By.id("multiselect1")));
-		Companies.selectByVisibleText("Hyundai");
-		
-		Select drpDocument = new Select(driver.findElement(By.name("SiteMap")));
-		drpDocument.selectByVisibleText("doc 3");
-		
-		WebElement textBox = driver.findElement(By.xpath("//*[@id=\"textbox1\"]"));
-		textBox.clear();
-		textBox.sendKeys("Hello World");
-		
-		WebElement button1 = driver.findElement(By.xpath("//*[@id=\"but2\"]"));
-		button1.click();
-		
-		java.util.List<WebElement> buttons = driver.findElements(By.name("samename"));
-		for(WebElement button : buttons) {
-			button.click();
-		}
-		
-		WebElement alertButton = driver.findElement(By.xpath("//*[@id=\"alert2\"]"));
-		alertButton.click();
+		WebElement dropdownCustomer = driver.findElement(By.xpath("//*[@id=\"userSelect\"]")); 
+		Select selectDropdown = new Select(dropdownCustomer);
+		selectDropdown.selectByVisibleText("Muhammad Sufyan");
+		WebElement dropdownCurrency = driver.findElement(By.xpath("//*[@id=\"currency\"]")); 
+		Select selectDropdown2 = new Select(dropdownCurrency);
+		selectDropdown2.selectByVisibleText("Dollar");
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/button")).click();
 		driver.switchTo().alert().accept();
-		
-		WebElement popupWindow = driver.findElement(By.xpath("//*[@id=\"HTML37\"]/div[1]/p/a"));
-		popupWindow.click();
-		String mainWindowHandle = driver.getWindowHandle();
-		
-		for (String windowHandle : driver.getWindowHandles()) {
-		    if (!windowHandle.equals(mainWindowHandle)) {
-		        driver.switchTo().window(windowHandle);
-		        break;
-		    }
-		}
-		String popupWindowText = driver.findElement(By.xpath("/html/body/h2")).getText();
-		System.out.println(popupWindowText);
-		
-		driver.close();
-		driver.switchTo().window(mainWindowHandle);
-		
-		WebElement radioButton = driver.findElement(By.id("radio1"));
-		radioButton.click();
-		
-		WebElement alertButton2 = driver.findElement(By.id("alert1"));
-		alertButton2.click();
-		driver.switchTo().alert().accept();
-		
-		WebElement checkBox2 = driver.findElement(By.id("checkbox2"));
-		checkBox2.click();
-		
-		WebElement checkBox1 = driver.findElement(By.id("checkbox1"));
-		checkBox1.click();
-		
-		WebElement readOnlyText = driver.findElement(By.xpath("//input[@id='rotb']"));
-		String textValue = readOnlyText.getAttribute("value");
-		System.out.println(textValue);
-		
-		WebElement promptButton = driver.findElement(By.xpath("//*[@id=\"prompt\"]"));
-		promptButton.click();
-		Alert alert = driver.switchTo().alert();
-		String inputText = "Hello, Selenium!";
-		alert.sendKeys(inputText);
-		alert.accept();
-		
-
 
 		
-		
 
-		
 
 	}
+	
+	
+	@Test
+	public void Test3(){
+		driver.findElement(By.xpath("/html/body/div/div/div[1]/button[1]")).click();
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[1]/div[1]/button")).click();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"userSelect\"]")));
+		
+		
+		WebElement dropdownUser = driver.findElement(By.xpath("//*[@id=\"userSelect\"]")); 
+		Select selectDropdown = new Select(dropdownUser);
+		selectDropdown.selectByVisibleText("Muhammad Sufyan");
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/form/button")).click();
+
+
+
+		
+
+
+		
+
+
+	}
+	
+	
+	@Test
+	public void Test4(){
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[2]")));		
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[2]")).click();
+		
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")));		
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")).sendKeys("5500");
+		
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/button")).click();
+		
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[3]")));
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[3]")).click();
+		
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")));
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")).sendKeys("2000");
+		
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/button")).click();
+
+		
+			
+
+
+	}
+	
+	
+	
 
 }
+
+
+
+
+
+-----------------------------------------------------------------------------------------------pom.xml file 
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>testNG_sample</groupId>
+  <artifactId>testNG_sample</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+		<!--
+		https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.4.1</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.11.0</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.19.0</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.19.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.8.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
