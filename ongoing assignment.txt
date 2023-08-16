@@ -1,12 +1,13 @@
-package testNG_sample;
+package Selenium;
 
 import java.time.Duration;
-import java.util.Set;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,62 +16,47 @@ import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class Test1 {
-	
+public class TestNG_Sample {
+
 	WebDriver driver;
 
 	@BeforeTest
-    public void setUp() {
-        // Set up the WebDriver instance (assuming you're using ChromeDriver)
+	public void setup() {
 		WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-		driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
+		driver = new ChromeDriver();
+		driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/");
 		driver.manage().window().maximize();
-        
-
-
-
-
-    }
-	
-	
-	@Test
-	public void Test() {
-		
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[2]/div/div[1]/div[2]/button"))).click();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[2]/div/div[1]/button[1]"))).click();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input"))).sendKeys("Muhammad");    
-        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[2]/input")).sendKeys("Sufyan");
-        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[3]/input")).sendKeys("54000");
-        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/button")).click();
-        driver.switchTo().alert().accept();
-			
-		
-		
 	}
-	
-	@Test
-	public void Test2(){
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[1]/button[2]")).click();
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"userSelect\"]")));
-		
-		WebElement dropdownCustomer = driver.findElement(By.xpath("//*[@id=\"userSelect\"]")); 
-		Select selectDropdown = new Select(dropdownCustomer);
-		selectDropdown.selectByVisibleText("Muhammad Sufyan");
-		WebElement dropdownCurrency = driver.findElement(By.xpath("//*[@id=\"currency\"]")); 
-		Select selectDropdown2 = new Select(dropdownCurrency);
-		selectDropdown2.selectByVisibleText("Dollar");
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/button")).click();
+	@Test
+	public void Test1() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Bank')]"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Add Customer')]")))
+				.click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@placeholder=\"First Name\"]")))
+				.sendKeys("Muhammad");
+		driver.findElement(By.xpath("//input[@placeholder=\"Last Name\"]")).sendKeys("Sufyan");
+		driver.findElement(By.xpath("//input[@placeholder=\"Post Code\"]")).sendKeys("54000");
+		driver.findElement(By.xpath("//button[@type=\"submit\"]")).click();
 		driver.switchTo().alert().accept();
 
-		
+	}
 
+	@Test
+	public void Test2() {
+		driver.findElement(By.xpath("//button[contains(text(),'Open Account')]")).click();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement dropdownCustomer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//select[@id='userSelect']")));
+		Select selectDropdown = new Select(dropdownCustomer);
+		selectDropdown.selectByVisibleText("Muhammad Sufyan");
+		WebElement dropdownCurrency = driver.findElement(By.xpath("//*[@id=\"currency\"]"));
+		Select selectDropdown2 = new Select(dropdownCurrency);
+		selectDropdown2.selectByVisibleText("Dollar");
+		driver.findElement(By.xpath("//button[@type=\"submit\"]")).click();
+		driver.switchTo().alert().accept();
 
 	}
-	
 	
 	@Test
 	public void Test3(){
@@ -85,94 +71,46 @@ public class Test1 {
 		selectDropdown.selectByVisibleText("Muhammad Sufyan");
 		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/form/button")).click();
 
-
-
-		
-
-
-		
-
-
 	}
-	
 	
 	@Test
 	public void Test4(){
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[2]")));		
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[2]")).click();
-		
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")));		
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")).sendKeys("5500");
-		
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/button")).click();
-		
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[3]")));
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[3]")).click();
-		
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")));
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/div/input")).sendKeys("2000");
-		
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/button")).click();
-
-		
-			
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Deposit')]"))).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[contains(text(),'Deposited')]//following-sibling::input"))).sendKeys("5500");			
+		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/button")).click();		
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-class=\"btnClass3\"]"))).click();		
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[contains(text(),'Withdrawn')]//following-sibling::input"))).sendKeys("2000");		
+		driver.findElement(By.xpath("//button[@type=\"submit\"]")).click();		
 
 
 	}
 	
+//	@Test
+//	public void Test5(){
+//	driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[3]/button[1]")).click();
+//	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
+//	wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder=\"yyyy-MM-ddTHH:mm:ss\"]"))).click();
+//
+//
+//	}
+//	
+	
+	@Test
+	public void Test5(){
+		driver.findElement(By.xpath("//button[@class=\"btn btn-lg tab\" and @ng-click=\"transactions()\"]")).click();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-show=\"showDate\"]"))).click();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-show=\"logout\"]")));
+
+		driver.findElement(By.xpath("//button[@class=\"btn home\"]")).click();
+		driver.findElement(By.xpath("//button[@class=\"btn btn-primary btn-lg\" and contains(text(),'Bank')]")).click();
+		driver.findElement(By.xpath("//button[@ng-class=\"btnClass3\"]")).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[contains(text(),'Muhammad')]//following-sibling::td/button"))).click();
+		driver.findElement(By.xpath("//button[@class=\"btn home\"]")).click();	
+	}
 	
 	
 
 }
-
-
-
-
-
------------------------------------------------------------------------------------------------pom.xml file 
-
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>testNG_sample</groupId>
-  <artifactId>testNG_sample</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <dependencies>
-		<!--
-		https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
-		<dependency>
-			<groupId>io.github.bonigarcia</groupId>
-			<artifactId>webdrivermanager</artifactId>
-			<version>5.4.1</version>
-		</dependency>
-		<!--
-		https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>4.11.0</version>
-		</dependency>
-		<!--
-		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.19.0</version>
-		</dependency>
-		<!--
-		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.19.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>7.8.0</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-</project>
