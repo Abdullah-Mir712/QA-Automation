@@ -1,7 +1,11 @@
+
+------------------------------------------------------------------------------------java file 
+
 package Selenium;
 
 import java.time.Duration;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +15,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -18,13 +23,20 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class TestNG_Sample {
 
-	WebDriver driver;
+	public static WebDriver driver;
+	public static Logger log;
 
 	@BeforeTest
 	public void setup() {
+		log= LogManager.getLogger(TestNG_Sample.class);
+
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
+		log.info("chromedriver setup is complete");
+
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject/");
+		log.info("Logged into XYZ Bank");
 		driver.manage().window().maximize();
 	}
 
@@ -34,12 +46,15 @@ public class TestNG_Sample {
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Bank')]"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Add Customer')]")))
 				.click();
+		log.info("logged in to bank manager account ");
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@placeholder=\"First Name\"]")))
 				.sendKeys("Muhammad");
 		driver.findElement(By.xpath("//input[@placeholder=\"Last Name\"]")).sendKeys("Sufyan");
 		driver.findElement(By.xpath("//input[@placeholder=\"Post Code\"]")).sendKeys("54000");
 		driver.findElement(By.xpath("//button[@type=\"submit\"]")).click();
+		log.info("filled and submitted the fields of costumer account ");
 		driver.switchTo().alert().accept();
+		log.info("");
 
 	}
 
@@ -55,21 +70,23 @@ public class TestNG_Sample {
 		selectDropdown2.selectByVisibleText("Dollar");
 		driver.findElement(By.xpath("//button[@type=\"submit\"]")).click();
 		driver.switchTo().alert().accept();
+		log.info("opened the customer account for transactions ");
 
 	}
 	
 	@Test
 	public void Test3(){
-		driver.findElement(By.xpath("/html/body/div/div/div[1]/button[1]")).click();
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[1]/div[1]/button")).click();
+		driver.findElement(By.xpath("//button[@class=\"btn home\"]")).click();
+		driver.findElement(By.xpath("//button[contains(text(),'Customer')]")).click();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
-		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//*[@id=\"userSelect\"]")));
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//select[@id=\"userSelect\"]")));
 		
 		
-		WebElement dropdownUser = driver.findElement(By.xpath("//*[@id=\"userSelect\"]")); 
+		WebElement dropdownUser = driver.findElement(By.xpath("//select[@id=\"userSelect\"]")); 
 		Select selectDropdown = new Select(dropdownUser);
 		selectDropdown.selectByVisibleText("Muhammad Sufyan");
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/form/button")).click();
+		driver.findElement(By.xpath("//button[contains(text(),'Login')]")).click();
+		log.info("Costumer logged in to its account ");
 
 	}
 	
@@ -78,10 +95,12 @@ public class TestNG_Sample {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Deposit')]"))).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[contains(text(),'Deposited')]//following-sibling::input"))).sendKeys("5500");			
-		driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[4]/div/form/button")).click();		
+		driver.findElement(By.xpath("//button[@type=\"submit\" and contains(text(),'Deposit'  )]")).click();	
+		log.info("Costumer deposited its money");
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-class=\"btnClass3\"]"))).click();		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[contains(text(),'Withdrawn')]//following-sibling::input"))).sendKeys("2000");		
 		driver.findElement(By.xpath("//button[@type=\"submit\"]")).click();		
+		log.info("Costumer made wiyhdrawal");
 
 
 	}
@@ -101,16 +120,131 @@ public class TestNG_Sample {
 		driver.findElement(By.xpath("//button[@class=\"btn btn-lg tab\" and @ng-click=\"transactions()\"]")).click();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-show=\"showDate\"]"))).click();
+		log.info("Transaction History is deleted");
 
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@ng-show=\"logout\"]")));
+		log.info("Costumer logged out from its account");
 
 		driver.findElement(By.xpath("//button[@class=\"btn home\"]")).click();
 		driver.findElement(By.xpath("//button[@class=\"btn btn-primary btn-lg\" and contains(text(),'Bank')]")).click();
 		driver.findElement(By.xpath("//button[@ng-class=\"btnClass3\"]")).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//td[contains(text(),'Muhammad')]//following-sibling::td/button"))).click();
 		driver.findElement(By.xpath("//button[@class=\"btn home\"]")).click();	
+		log.info("Logged in to Bank Manager deleted the costumer account");
+	}
+	
+	@AfterTest
+	public void ending() {
+		driver.quit();
+		log.info("Quitting the driver");
 	}
 	
 	
 
 }
+
+
+
+
+
+
+--------------------------------------------------------------------------  log4j2.properties
+
+name=PropertiesConfig
+property.filename = logs
+appenders = console, file
+
+appender.console.type = Console
+appender.console.name = STDOUT
+appender.console.layout.type = PatternLayout
+appender.console.layout.pattern = [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+
+appender.file.type = File
+appender.file.name = LOGFILE
+appender.file.fileName=${filename}/logs.log
+appender.file.layout.type=PatternLayout
+appender.file.layout.pattern=[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+
+rootLogger.level = debug
+rootLogger.appenderRefs = console
+rootLogger.appenderRef.stdout.ref = STDOUT
+
+
+-----------------------------------------------------------------------------    log4j2.xml both in src/test.rscrs
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%n"/>
+        </Console>
+        <File name="File" fileName="c:\\temp\\log4j.log" append="true">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level - %msg%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.sdetadda" level="info" additivity="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
+
+--------------------------------------------------------------------------------   pom.xml file
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>TestSelenium</groupId>
+  <artifactId>TestSelenium</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+   <dependencies>
+		<!--
+		https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.4.1</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.11.0</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.19.0</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.19.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>7.8.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>LoggerPractice</groupId>
+			<artifactId>LoggerPractice</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+   </dependencies>
+ 
+</project>
+
